@@ -1,0 +1,591 @@
+/*
+ * Компактный вид страниц (inc/pkg-compact.php). Подключается только при включённой галочке
+ * «Компактный вид страниц» в «Настройках темы»; все правила под классом body.st-compact.
+ */
+
+/* ───── Отступы секций и заголовки ───── */
+.st-compact .section { padding: clamp(30px, 3.6vw, 50px) 0; }
+.st-compact .section-head { margin-bottom: 20px; }
+.st-compact .mt-40 { margin-top: 24px; }
+.st-compact .mt-24 { margin-top: 16px; }
+@media (min-width: 721px) {
+  .st-compact { font-size: 15px; }
+  .st-compact h2 { font-size: clamp(22px, 2.3vw, 28px); }
+  .st-compact .prose h2 { font-size: 21px; margin-top: 1.4em; }
+  .st-compact .prose--page .prose__intro { font-size: 16px; }
+  .st-compact .answer { padding: 20px clamp(18px, 2.4vw, 28px); }
+}
+@media (max-width: 720px) {
+  .st-compact .section { padding: 26px 0; }
+  .st-compact .section-head { margin-bottom: 14px; }
+  .st-compact .prose h2 { margin-top: 1.3em; }
+}
+
+/* ───── «Подробно»: разделы свёрнуты до заголовка и первого абзаца ───── */
+.st-compact .pcol__btn { display: none; }
+.js .st-compact .pcol__btn {
+  display: inline-flex; align-items: center; gap: 8px; margin: -4px 0 4px; padding: 8px 0; border: 0; background: none;
+  font: 700 14.5px var(--font); color: var(--orange-text); cursor: pointer;
+}
+.js .st-compact .pcol__btn::after { content: ''; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-3px); }
+.js .st-compact .pcol.is-open > .pcol__btn::after { transform: rotate(225deg) translate(-2px, -1px); }
+.js .st-compact .pcol__btn:hover { color: var(--orange-700); }
+.js .st-compact .pcol__btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: var(--r-xs); }
+.js .st-compact .pcol:not(.is-open):not(.pcol--uf) > .pcol__body { display: none; }
+.js .st-compact .pcol > h2 { cursor: pointer; }
+.js .st-compact .pcol > h2:hover { color: var(--navy-700); }
+.st-compact .pcol > p:last-of-type { margin-bottom: .5em; }
+/* На компьютере разделы «Подробно» - карточками в две колонки; раскрытый раздел с таблицей - на всю ширину. */
+@media (min-width: 1024px) {
+  .st-compact .prose--page:has(> .pcol) { max-width: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; align-items: start; }
+  .st-compact .prose--page:has(> .pcol) > :not(.pcol) { grid-column: 1 / -1; max-width: 820px; }
+  .st-compact .prose--page > .pcol.is-open:has(table) { grid-column: 1 / -1; }
+  .st-compact .prose--page > .pcol > h2 { margin-top: 1.2em; }
+}
+
+/* ───── Цены: повтор «Что входит» под пакетами убран, без пакетов - под раскрытием ───── */
+.st-compact .grid:has(.pkg) + div .ptable__inc,
+.st-compact .grid:has(.pkg) + * .ptable__inc { display: none; }
+.st-compact .ptable__inc--fold { padding: 0; }
+.st-compact .ptable__inc--fold > summary {
+  display: flex; align-items: center; gap: 10px; padding: 14px 18px; cursor: pointer; list-style: none;
+  font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
+}
+.st-compact .ptable__inc--fold > summary::-webkit-details-marker { display: none; }
+.st-compact .ptable__inc--fold > summary::after { content: ''; width: 8px; height: 8px; border-right: 2px solid var(--orange-text); border-bottom: 2px solid var(--orange-text); transform: rotate(45deg) translateY(-3px); }
+.st-compact .ptable__inc--fold[open] > summary::after { transform: rotate(225deg) translate(-2px, -1px); }
+.st-compact .ptable__inc--fold > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+.st-compact .ptable__inc--fold > .inc, .st-compact .ptable__inc--fold > .brands { margin: 0 18px 18px; }
+.st-compact .pkg { padding-top: 22px; padding-bottom: 22px; }
+.st-compact .pkg li { margin-bottom: 4px; }
+.st-compact .pkg__price { margin: 6px 0 10px; }
+@media (min-width: 721px) {
+  .st-compact th, .st-compact td { padding-top: 10px; padding-bottom: 10px; }
+  .st-compact .estimate__doc th, .st-compact .estimate__doc td { padding: 7px 10px; }
+}
+@media (max-width: 720px) {
+  .st-compact table.price tr { padding-top: 9px; padding-bottom: 9px; }
+}
+
+/* ───── «Выбор» и «Смежные услуги»: карточки без описаний ───── */
+.st-compact #vybor .card, .st-compact .related .card { padding: 16px 18px; }
+.st-compact #vybor .card h3, .st-compact .related .card h3 { font-size: 17px; margin-bottom: 4px; }
+.st-compact #vybor .card p.muted, .st-compact .related .card p.muted { display: none; }
+.st-compact #vybor .card__price, .st-compact .related .card__price { padding-top: 4px; font-size: 15px; }
+.st-compact .also { margin-top: 18px; padding: 14px 16px; }
+.st-compact .also h3 { margin-bottom: 8px; }
+.st-compact .also__list a { padding: 9px 12px; }
+@media (max-width: 720px) {
+  .st-compact #vybor .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .st-compact #vybor .card { padding: 12px 14px; }
+  .st-compact #vybor .card h3 { font-size: 16px; }
+  .st-compact .also__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .st-compact .also__list b { font-size: 14px; }
+}
+
+/* ───── Объекты: не больше 3 карточек в ряд ───── */
+.st-compact #obekty .grid--4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.st-compact #obekty .grid--4 > :nth-child(n+4) { display: none; }
+.st-compact #obekty .obj__body { padding: 14px 16px 16px; }
+.st-compact #obekty .obj__params { margin: 2px 0 8px; }
+@media (max-width: 720px) {
+  .st-compact #obekty .grid--4.rail { grid-template-columns: none; }
+}
+
+/* ───── Гарантии, оплата: один ряд компактных карточек ───── */
+.st-compact .section--dark > .wrap:has(> .guar) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.st-compact .section--dark > .wrap:has(> .guar):not(:has(> .guar__block .pay)) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.st-compact .section--dark > .wrap:has(> .guar) > * { grid-column: 1 / -1; }
+.st-compact .section--dark > .wrap:has(> .guar) > .section-head { margin-bottom: 8px; }
+.st-compact .section--dark > .wrap > .guar { display: contents; }
+.st-compact .section--dark > .wrap > .guar > .guar__item { grid-column: auto; }
+.st-compact .guar__item, .st-compact .guar__block .pay__item {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px; min-height: 72px;
+  border-radius: var(--r); background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+}
+.st-compact .guar__icon { flex-shrink: 0; width: 40px; height: 40px; margin: 0; }
+.st-compact .guar__item h3 { margin: 0; font-size: 16px; line-height: 1.25; }
+.st-compact .guar__item p { display: none; }
+.st-compact .section--dark > .wrap > .guar__block:has(> .pay) { grid-column: auto; margin: 0; padding: 0; border: 0; }
+.st-compact .guar__block .pay { display: block; height: 100%; }
+.st-compact .guar__block .pay__item { height: 100%; }
+.st-compact .guar__block .pay__item::before {
+  content: ''; flex-shrink: 0; width: 40px; height: 40px; border-radius: var(--r-sm);
+  background: rgba(232,102,42,.16) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23F2A23A' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 7h18v12H3z M3 11h18 M16 15h2'/%3E%3C/svg%3E") center / 22px no-repeat;
+}
+.st-compact .guar__block .pay__item h3 { display: none; }
+.st-compact .guar__block .pay__item p { margin: 0 !important; font-size: 16px; font-weight: 700; line-height: 1.25; color: #fff !important; }
+.st-compact .guar__block:has(> .est-fold) { margin-top: 4px; padding-top: 0; border: 0; }
+.st-compact .guar__caption { margin-bottom: 4px; }
+.st-compact .one__node { padding: 12px 16px; }
+
+/* Смета-пример под «Показать пример сметы» */
+.st-compact .est-fold > summary {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 20px; border-radius: var(--r-pill); cursor: pointer; list-style: none;
+  font-weight: 700; font-size: 15px; border: 2px solid currentColor; color: var(--navy);
+}
+.st-compact .section--dark .est-fold > summary { color: #fff; border-color: rgba(255,255,255,.5); }
+.st-compact .est-fold > summary::-webkit-details-marker { display: none; }
+.st-compact .est-fold > summary::after { content: ''; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-3px); }
+.st-compact .est-fold[open] > summary::after { transform: rotate(225deg) translate(-2px, -1px); }
+.st-compact .est-fold > summary:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+.st-compact .est-fold[open] > .estimate { margin-top: 24px; }
+
+@media (max-width: 960px) {
+  .st-compact .section--dark > .wrap:has(> .guar),
+  .st-compact .section--dark > .wrap:has(> .guar):not(:has(> .guar__block .pay)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .st-compact .section--dark > .wrap:has(> .guar),
+  .st-compact .section--dark > .wrap:has(> .guar):not(:has(> .guar__block .pay)) { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .st-compact .guar__item, .st-compact .guar__block .pay__item { min-height: 0; padding: 10px 14px; }
+}
+
+/* ───── Нижняя форма заявки ───── */
+.st-compact .lead { grid-template-columns: minmax(0, 1fr) minmax(0, 540px); gap: 32px; align-items: start; padding: clamp(20px, 3vw, 36px); }
+.st-compact .lead > div:first-child > p { display: none; }
+.st-compact .lead h2 { margin-bottom: .3em; }
+.st-compact .lead__points { margin-top: 14px; gap: 6px; }
+.st-compact .lead .form { gap: 10px 14px; padding: 20px; }
+.st-compact .lead .field { gap: 4px; align-content: start; }
+.st-compact .contact-pick__opt { padding: 6px 10px; }
+.st-compact .contact-pick__opt input { min-height: 0; height: 18px; padding: 0; }
+@media (min-width: 721px) {
+  .st-compact .lead .form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .st-compact .lead .form > * { grid-column: 1 / -1; }
+  .st-compact .lead .form > .field:has(> input[name='name']),
+  .st-compact .lead .form > .field[data-field='phone'] { grid-column: auto; }
+}
+@media (max-width: 900px) {
+  .st-compact .lead { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+}
+@media (max-width: 720px) {
+  .st-compact .lead { padding: 20px 16px; }
+  .st-compact .lead .form { padding: 16px; }
+}
+
+/* ───── Объекты и фото: ниже обложки ───── */
+.st-compact #obekty .obj__img img { aspect-ratio: 16 / 9; }
+.st-compact #obekty .gallery--strip img { aspect-ratio: 4 / 3; }
+.st-compact #obekty h3 { margin-bottom: .4em; }
+
+/* ───── Услуги на главной: ниже карточки, ссылки строкой ───── */
+.st-compact .svc img, .st-compact .need--svc { aspect-ratio: 2 / 1; }
+.st-compact .svc__body { padding: 16px 18px 18px; }
+.st-compact .svc__body p { margin-bottom: 8px; }
+.st-compact .svc__body ul { display: flex !important; flex-wrap: wrap; gap: 4px 14px !important; margin-bottom: 12px !important; }
+.st-compact .minor-line { margin-top: 16px; padding: 12px 16px; }
+
+/* ───── Этапы, «Что должно быть готово», вопросы, первый экран ───── */
+.st-compact .prep { margin-top: 24px; }
+.st-compact .checklist { gap: 8px 20px; }
+.st-compact .checklist li { padding: 9px 14px 9px 46px; }
+.st-compact .checklist li::before { top: 10px; left: 14px; }
+.st-compact .checklist li::after { top: 13px; left: 17px; }
+.st-compact .faq { gap: 8px; }
+.st-compact .faq summary { padding: 14px 52px 14px 18px; }
+.st-compact .faq .faq__a { padding: 0 18px 16px; }
+@media (min-width: 881px) {
+  .st-compact .hero { padding-bottom: 36px; }
+  .st-compact .steps li { padding-top: 40px; }
+}
+@media (max-width: 720px) {
+  .st-compact .steps { gap: 12px; }
+  .st-compact .hero { padding-bottom: 24px; }
+}
+
+/* ───── Телефон: ещё короче ───── */
+@media (max-width: 720px) {
+  /* Длинный прайс (больше 8 строк): первые 6, остальные - кнопкой (кнопку добавляет compact.js). */
+  .js .st-compact .table-wrap.is-cut:not(.is-open) table.price tbody tr:nth-child(n+7) { display: none; }
+  .st-compact .lead__points { display: none; }
+}
+.st-compact .price-more { display: none; align-items: center; gap: 8px; margin: 10px 0 0; padding: 8px 0; border: 0; background: none; font: 700 14.5px var(--font); color: var(--orange-text); cursor: pointer; }
+.st-compact .price-more::after { content: ''; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-3px); }
+.st-compact .price-more[aria-expanded='true']::after { transform: rotate(225deg) translate(-2px, -1px); }
+.st-compact .price-more:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+@media (max-width: 720px) {
+  .js .st-compact .price-more { display: inline-flex; }
+}
+/* Компьютер: прайс длиннее 10 строк - первые 8, остальные кнопкой. */
+@media (min-width: 721px) {
+  .js .st-compact .table-wrap.is-cut-d:not(.is-open) table.price tbody tr:nth-child(n+9) { display: none; }
+  .js .st-compact .price-more--d { display: inline-flex; }
+}
+
+/* ───── Подвал на телефоне: колонки ссылок в два столбца ───── */
+@media (max-width: 560px) {
+  .st-compact .footer { padding-top: 28px; }
+  .st-compact .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; padding-bottom: 24px; }
+  .st-compact .footer__brand { grid-column: 1 / -1; }
+  .st-compact .footer h3 { margin-bottom: 10px; }
+  .st-compact .footer ul { gap: 6px; }
+  .st-compact .footer li { line-height: 1.35; }
+  .st-compact .footer__h-next { margin-top: 16px; }
+}
+
+/* ───── Услуги на главной, телефон: фото узкой полосой, ссылки строкой ───── */
+@media (max-width: 620px) {
+  .st-compact .svc img, .st-compact .need--svc { aspect-ratio: 3 / 1; }
+  .st-compact .need--svc { padding: 8px 12px 14px; }
+  .st-compact .need--svc .need__text { display: none; }
+  .st-compact .svc__body { padding: 12px 16px 14px; }
+  .st-compact .svc__body h3 { margin-bottom: 4px; }
+  .st-compact .svc__body ul { gap: 2px 14px !important; }
+  .st-compact #uslugi .grid { gap: 12px; }
+  .st-compact .minor-line .chip { padding: 6px 12px; }
+}
+
+/* ════════════ Второй проход (28.10.2026): ещё короче, без пустых зон ════════════ */
+
+/* ───── «Подробно»: первый абзац свёрнутого раздела - 3 строки на компьютере, 4 на телефоне, с затуханием ───── */
+.js .st-compact .pcol[data-pcol]:not(.is-open) > [data-pcol-lead] { max-height: 4.8em; max-height: 3lh; overflow: hidden; }
+.js .st-compact .pcol:not(.is-open):not(.is-fitlead) > [data-pcol-lead] { -webkit-mask-image: linear-gradient(#000 calc(100% - 1.5em), transparent); mask-image: linear-gradient(#000 calc(100% - 1.5em), transparent); }
+.js .st-compact .pcol--fit > .pcol__btn { display: none; }
+.st-compact .pcol > [data-pcol-lead] { margin-bottom: .5em; }
+/* Вступление (до первого H2): на всю ширину над карточками разделов. */
+@media (min-width: 1024px) {
+  .st-compact .prose--page > .pcol--intro { grid-column: 1 / -1; max-width: 820px; }
+  /* Нечётное число разделов: последний - на всю ширину, без пустой колонки рядом. */
+  .st-compact .prose--page:has(> .pcol--intro) > .pcol:last-of-type:nth-of-type(even),
+  .st-compact .prose--page:not(:has(> .pcol--intro)) > .pcol:last-of-type:nth-of-type(odd) { grid-column: 1 / -1; }
+}
+.st-compact .pcol--intro > ul { margin-top: .4em; }
+@media (max-width: 720px) {
+  .js .st-compact .pcol[data-pcol]:not(.is-open) > [data-pcol-lead] { max-height: 6.4em; max-height: 4lh; }
+  /* Кнопки раскрытия на телефоне - не мельче 16 px. */
+  .js .st-compact .pcol__btn, .st-compact .price-more, .st-compact .more__btn { font-size: 16px; }
+}
+
+/* «Коротко: цена и сроки» на телефоне: 3 строки, затухание - на последней строке. */
+.st-compact .answer .more.is-clamped:not(.is-open) > .more__body { -webkit-mask-image: linear-gradient(#000 calc(100% - 26px), transparent); mask-image: linear-gradient(#000 calc(100% - 26px), transparent); }
+
+/* ───── Общая кнопка «Ещё / Подробнее» (добавляет compact.js) ───── */
+.st-compact .cmore { display: inline-flex; align-items: center; gap: 8px; margin: 12px 0 0; padding: 8px 0; border: 0; background: none; font: 700 14.5px var(--font); color: var(--orange-text); cursor: pointer; }
+.st-compact .cmore::after { content: ''; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-3px); }
+.st-compact .cmore[aria-expanded='true']::after { transform: rotate(225deg) translate(-2px, -1px); }
+.st-compact .cmore:hover { color: var(--orange-700); }
+.st-compact .cmore:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: var(--r-xs); }
+@media (max-width: 720px) { .st-compact .cmore { font-size: 16px; } }
+
+/* ───── Вопросы: все свёрнуты, видны первые 5, остальные - «Ещё вопросы» ───── */
+.js .st-compact .faq:not(.is-all) > details:nth-of-type(n+6) { display: none; }
+/* Ровно 6 вопросов: видны 4, под кнопкой 2 (кнопка ради одного вопроса не нужна). */
+.js .st-compact .faq:not(.is-all):has(> details:nth-of-type(6):last-of-type) > details:nth-of-type(5) { display: none; }
+
+/* ───── Этапы: подпись этапа - 3 строки на компьютере, 2 на телефоне; целиком - «Подробнее об этапах» ───── */
+.js .st-compact .steps:not(.is-open) li > p { max-height: 4.8em; max-height: 3lh; overflow: hidden; -webkit-mask-image: linear-gradient(#000 calc(100% - 1.2em), transparent); mask-image: linear-gradient(#000 calc(100% - 1.2em), transparent); }
+.js .st-compact .steps.is-fit li > p { -webkit-mask-image: none; mask-image: none; }
+@media (max-width: 720px) {
+  .js .st-compact .steps:not(.is-open) li > p { max-height: 3.2em; max-height: 2lh; }
+}
+
+/* ───── «Что должно быть готово в доме»: на компьютере - до 3 в ряд, последний ряд растягивается (без пустых ячеек) ───── */
+@media (min-width: 721px) {
+  .st-compact .prep .checklist { display: flex; flex-wrap: wrap; gap: 8px; }
+  .st-compact .prep .checklist li { flex: 1 1 calc(33.333% - 8px); font-size: 14.5px; }
+}
+@media (min-width: 721px) and (max-width: 1023px) {
+  .st-compact .prep .checklist li { flex-basis: calc(50% - 8px); }
+}
+
+/* ───── «Также по теме»: плитки растягиваются по строке, без пустых ячеек ───── */
+.st-compact .also__list { display: flex; flex-wrap: wrap; }
+.st-compact .also__list > li { flex: 1 1 200px; }
+@media (max-width: 720px) {
+  .st-compact .also__list > li { flex-basis: calc(50% - 8px); }
+}
+/* «Что выбрать»: карточки делят строку поровну, последняя строка тоже растягивается. */
+.st-compact #vybor .grid { display: flex; flex-wrap: wrap; }
+.st-compact #vybor .grid > * { flex: 1 1 calc(25% - 20px); min-width: 0; }
+.st-compact #vybor .grid--3 > * { flex-basis: calc(33.333% - 20px); }
+@media (max-width: 960px) {
+  .st-compact #vybor .grid > *, .st-compact #vybor .grid--3 > * { flex-basis: calc(50% - 20px); }
+}
+@media (max-width: 720px) {
+  .st-compact #vybor .grid > *, .st-compact #vybor .grid--3 > * { flex-basis: calc(50% - 10px); }
+}
+
+/* ───── Сравнение («Чем отапливать дом» и т. п.) на телефоне: таблица шире (листается вбок), строки вдвое ниже ───── */
+@media (max-width: 720px) {
+  .st-compact .compare { min-width: 720px; }
+  .st-compact .compare th, .st-compact .compare td { padding-top: 8px; padding-bottom: 8px; }
+}
+
+/* ───── Объекты: без заглушек «Нужно фото» (их не выводит PHP: obj-card, objects-grid), карточки делят строку поровну ───── */
+.st-compact #obekty .obj__img--none { padding: 14px 16px 0; }
+.st-compact #obekty .widget-stub { display: none; }
+@media (min-width: 721px) {
+  .st-compact #obekty .grid--4 { display: flex; flex-wrap: wrap; }
+  .st-compact #obekty .grid--4 > .obj { flex: 1 1 0; min-width: 0; }
+  /* Один объект - строкой на всю ширину: название, параметры, бюджет. */
+  .st-compact #obekty .grid--4 > .obj:only-child { flex-direction: row; align-items: center; }
+  .st-compact #obekty .grid--4 > .obj:only-child > .obj__img { padding: 0 0 0 20px; }
+  .st-compact #obekty .grid--4 > .obj:only-child > .obj__body { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 20px; padding: 16px 20px; }
+  .st-compact #obekty .grid--4 > .obj:only-child h3 { margin: 0; }
+  .st-compact #obekty .grid--4 > .obj:only-child .obj__params { margin: 0; }
+  .st-compact #obekty .grid--4 > .obj:only-child .obj__budget { margin: 0 0 0 auto; }
+  /* Лента фото: столько колонок, сколько фото, без пустых мест справа. */
+  .st-compact #obekty .gallery--strip { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .st-compact #obekty .gallery--strip img { aspect-ratio: 16 / 10; }
+}
+
+/* ───── Заглушка фото в первом экране: ниже, без пустого места ───── */
+@media (min-width: 881px) {
+  .st-compact .hero__media--need > .need--hero:not(.need--short) { aspect-ratio: auto; flex: 1; min-height: 260px; }
+}
+@media (max-width: 880px) {
+  .st-compact .hero__media--need > .need--hero { aspect-ratio: 3 / 1; padding: 12px 16px; }
+  .st-compact .hero__media--need > .need--hero .need__text { display: none; }
+  .st-compact .hero__media--need > .need--hero .need__icon { width: 32px; height: 32px; }
+}
+
+/* ───── Отзывы: без пустого места под виджет ───── */
+.st-compact .rating .widget-stub { display: none; }
+.st-compact .rating > p.muted { margin-bottom: 8px !important; }
+.st-compact .review { padding: 16px 18px; }
+.st-compact .review p { margin: 6px 0; }
+@media (min-width: 861px) {
+  .st-compact .reviews { grid-template-columns: 240px 1fr; gap: 16px; }
+  .st-compact .rating { padding: 18px; }
+}
+
+/* ───── «Также делаем» / «Также по теме» строкой на телефоне: одна прокручиваемая строка ссылок ───── */
+@media (max-width: 720px) {
+  .st-compact .minor-line { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; gap: 8px; padding: 12px 14px; }
+  .st-compact .minor-line::-webkit-scrollbar { display: none; }
+  .st-compact .minor-line > * { flex-shrink: 0; }
+  .st-compact .minor-line .chip { white-space: nowrap; font-size: 16px; }
+}
+
+/* ───── Главная ───── */
+/* Услуги на телефоне: без заглушек «Нужно фото». */
+@media (max-width: 620px) {
+  .st-compact .svc > .need--svc { display: none; }
+}
+/* «Один подрядчик - одна гарантия» на телефоне: разделы плитками по строке, итог - строкой. */
+@media (max-width: 720px) {
+  .st-compact .one { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+  .st-compact .one > .one__op { display: none; }
+  .st-compact .one > .one__node { flex: 1 1 auto; padding: 10px 14px; }
+  .st-compact .one > .one__node:not(.one__res) small { display: none; }
+  .st-compact .one > .one__res { flex-basis: 100%; }
+  .st-compact .one + p.center { margin: 14px 0 22px !important; }
+}
+/* География: заглушка карты не выше списка районов рядом. */
+.st-compact .split:has(> .map-stub) { align-items: stretch; }
+.st-compact .split > .map-stub { aspect-ratio: auto; min-height: 200px; }
+@media (max-width: 860px) {
+  /* Карта здесь только схема-заглушка (настоящая не подключена): на телефоне не показываем. */
+  .st-compact .split > .map-stub { display: none; }
+}
+
+/* ───── Подбор станции и «Станции очистки» на телефоне: карточки лентой (листаются вбок), а не столбиком ───── */
+@media (max-width: 720px) {
+  .st-compact .picker__grid, .st-compact .kanal__tiles {
+    display: grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(84%, 320px); gap: 12px;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(-1 * var(--gutter)); padding: 4px var(--gutter) 12px; scroll-padding-inline: var(--gutter);
+  }
+  .st-compact .picker__grid::-webkit-scrollbar, .st-compact .kanal__tiles::-webkit-scrollbar { display: none; }
+  .st-compact .picker__grid > *, .st-compact .kanal__tiles > * { scroll-snap-align: start; }
+  /* Лента не должна распирать колонку: ширина колонки - по экрану. */
+  .st-compact .kanal__grid { grid-template-columns: minmax(0, 1fr); }
+  .st-compact .kanal__brands, .st-compact .picker { min-width: 0; }
+  /* Плитки марок стоят в рамке с отступом 18 px: лента - до краёв рамки. */
+  .st-compact .kanal__tiles { margin-inline: -18px; padding-inline: 18px; scroll-padding-inline: 18px; grid-auto-columns: min(80%, 300px); }
+}
+
+/* ════════════ Третий проход (28.10.2026): меньше прокрутки, без пустых полей ════════════ */
+
+/* ───── Отступы секций: ещё на пятую часть меньше ───── */
+.st-compact .section { padding: clamp(26px, 2.8vw, 40px) 0; }
+@media (max-width: 720px) {
+  .st-compact .section { padding: 22px 0; }
+}
+
+/* ───── Первый экран на компьютере: заголовок мельче, колонка текста шире, фото по высоте текста ───── */
+@media (min-width: 881px) {
+  .st-compact .hero { padding-top: 20px; padding-bottom: 28px; }
+  .st-compact .hero__title { font-size: clamp(30px, 3.1vw, 40px); margin-bottom: 12px; }
+  .st-compact .hero__offer { margin-bottom: 16px; }
+  .st-compact .hero__price { margin-bottom: 18px; }
+  .st-compact .hero__trust { margin-top: 22px; padding-top: 16px; }
+  .st-compact .hero__grid:has(> .hero__media > img) { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); align-items: stretch; }
+  /* Фото не задаёт высоту первого экрана: растягивается на высоту колонки текста (не ниже 340 px). */
+  .st-compact .hero__media:has(> img) { min-height: 340px; }
+  .st-compact .hero__media > img { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+}
+/* Телефон: фото в первом экране ниже, подпись «Цена» - в строке с ценой. */
+@media (max-width: 880px) {
+  .st-compact .hero__media > img { aspect-ratio: 2 / 1; }
+}
+@media (max-width: 720px) {
+  .st-compact .hero__price { display: block; }
+  .st-compact .hero__price > span { margin-right: 6px; }
+}
+
+/* ───── Услуги на главной, компьютер: две колонки, фото слева на высоту текста; без заглушек «Нужно фото» ───── */
+@media (min-width: 1024px) {
+  .st-compact #uslugi .grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .st-compact #uslugi .svc { flex-direction: row; }
+  .st-compact #uslugi .svc > a:first-child { position: relative; flex: 0 0 36%; }
+  .st-compact #uslugi .svc > a:first-child > img { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+  .st-compact #uslugi .svc > .need--svc { display: none; }
+  .st-compact #uslugi .svc__body { padding: 16px 20px; }
+  .st-compact #uslugi .svc__body h3 { margin-bottom: 4px; }
+  .st-compact #uslugi .svc__body p { margin-bottom: 6px; }
+  .st-compact #uslugi .svc__body ul { margin-bottom: 10px !important; }
+  /* семь карточек (29.10.2026): последняя («Всё одним договором») на весь ряд, фото той же ширины, что в колонке */
+  .st-compact #uslugi .grid--3 > .svc:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .st-compact #uslugi .grid--3 > .svc:last-child:nth-child(odd) > a:first-child { flex-basis: calc((100% - 16px) / 2 * .36); }
+}
+
+/* ───── Главная, цены: «Показать пример сметы» и «Все цены» одной строкой (пока смета свёрнута) ───── */
+.st-compact #ceny > .wrap > .mt-40:has(> .est-fold:not([open])) { display: inline-block; margin-right: 12px; vertical-align: top; }
+.st-compact #ceny > .wrap > .mt-40:has(> .est-fold:not([open])) + .mt-24 { display: inline-block; margin-top: 24px; vertical-align: top; }
+
+/* ───── Этапы на телефоне: срок этапа - в строке с названием ───── */
+@media (max-width: 720px) {
+  .st-compact .steps li { display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; }
+  .st-compact .steps li > h3 { flex: 0 1 auto; margin-bottom: 2px; }
+  .st-compact .steps li > .days { order: 1; margin-bottom: 2px; }
+  .st-compact .steps li > p { order: 2; flex: 1 0 100%; }
+}
+
+/* ───── Вопросы на компьютере: заголовок слева, список справа (без пустой правой половины) ───── */
+@media (min-width: 1024px) {
+  .st-compact #voprosy > .wrap:has(> .faq) { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); column-gap: 48px; align-items: start; }
+  .st-compact #voprosy > .wrap:has(> .faq) > * { grid-column: 2; }
+  .st-compact #voprosy > .wrap:has(> .faq) > .section-head { grid-column: 1; grid-row: 1 / span 3; margin: 0; }
+  .st-compact #voprosy .faq { max-width: none; }
+  .st-compact #voprosy > .wrap > .cmore { justify-self: start; }
+}
+
+/* ───── Нижняя форма заявки на широком экране: пункты одной строкой под заголовком, поля - в три колонки на всю ширину ───── */
+@media (min-width: 1181px) {
+  .st-compact .lead { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 28px 32px 32px; }
+  .st-compact .lead > div:first-child > h2 { margin: 0; }
+  .st-compact .lead .lead__points { display: flex; flex-wrap: wrap; gap: 6px 28px; margin: 8px 0 0; }
+  .st-compact .lead .form { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px 18px; align-items: start; }
+  .st-compact .lead .form > * { grid-column: 1 / -1; }
+  .st-compact .lead .form > .field:has(> input[name='name']),
+  .st-compact .lead .form > .field[data-field='phone'] { grid-column: span 3; }
+  .st-compact .lead .form > .contact-pick { grid-column: span 6; }
+  .st-compact .lead .form > .field:has(> .file),
+  .st-compact .lead .form > .consent { grid-column: span 4; }
+  .st-compact .lead .form > .consent { align-self: center; }
+  .st-compact .lead .form > button[type='submit'] { grid-column: span 4; }
+  .st-compact .lead .form > .form-note { grid-column: span 5; align-self: center; margin: 0; }
+  .st-compact .lead .form > .form-note:last-child { grid-column: span 3; }
+  /* Упрощённая форма: «Приложить проект» | согласие | «Перезвоним за 5 минут», ниже кнопка и пояснение. */
+  .st-compact .lead .form > .form__more { grid-column: span 3; align-self: center; }
+  .st-compact .lead .form > .consent { grid-column: span 5; }
+  .st-compact .lead .form > .form-note--promise { grid-column: span 4; }
+  .st-compact .lead .form > .form-note:last-child { grid-column: span 8; }
+}
+
+/* Поле файла не шире формы: колонка поля сжимается, длинное имя файла обрезается многоточием (было шире формы на телефоне). */
+.st-compact .form .field { grid-template-columns: minmax(0, 1fr); }
+
+/* ───── Подвал: на компьютере плотнее; на телефоне группы ссылок свёрнуты до заголовков (кнопки - compact.js) ───── */
+@media (min-width: 1181px) {
+  .st-compact .footer__grid { grid-template-columns: 1.25fr .95fr 1.3fr 1fr .95fr; gap: 24px; }
+}
+/* Средний экран: четыре колонки ссылок в один ряд (было 3 + одна во втором ряду с пустым местом справа). */
+@media (min-width: 861px) and (max-width: 1180px) {
+  .st-compact .footer__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+/* Логотип слева от названия и контактов, а не над ними (на всю ширину подвала - до 1180 px). */
+@media (max-width: 1180px) {
+  .st-compact .footer__brand { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 14px; align-items: start; }
+  .st-compact .footer__brand > svg { width: 48px; height: 48px; margin: 0; grid-row: 1 / span 3; }
+  .st-compact .footer__brand > p { grid-column: 2; }
+}
+@media (min-width: 561px) {
+  .st-compact .footer { padding-top: 40px; }
+  .st-compact .footer__grid { padding-bottom: 28px; }
+  .st-compact .footer h3 { margin-bottom: 10px; }
+  .st-compact .footer__grid ul { gap: 5px; }
+  .st-compact .footer__grid li { line-height: 1.4; }
+  .st-compact .footer__h-next { margin-top: 18px; }
+}
+.st-compact .fnav__btn { display: none; }
+@media (max-width: 560px) {
+  .st-compact .footer__grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .st-compact .footer__brand { padding-bottom: 14px; }
+  .js .st-compact .footer__grid > div:not(.footer__brand) > h3 {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; margin: 0;
+    border-top: 1px solid rgba(255,255,255,.1); cursor: pointer;
+  }
+  .js .st-compact .footer__grid > div:not(.footer__brand) > h3 > a { padding: 12px 0; }
+  .js .st-compact .fnav__btn {
+    display: inline-grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; margin-right: -12px; padding: 0;
+    border: 0; background: none; color: #fff; cursor: pointer;
+  }
+  .js .st-compact .fnav__btn::after { content: ''; width: 9px; height: 9px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-3px); }
+  .js .st-compact .fnav__btn[aria-expanded='true']::after { transform: rotate(225deg) translate(-2px, -1px); }
+  .js .st-compact .fnav__btn:focus-visible { outline: 2px solid var(--amber); outline-offset: -4px; border-radius: var(--r-sm); }
+  .js .st-compact .footer__grid > div:not(.footer__brand) > h3:not(.is-open) + ul { display: none; }
+  .js .st-compact .footer__grid > div:not(.footer__brand) > h3.is-open + ul { padding-bottom: 14px; }
+  .js .st-compact .footer__grid { padding-bottom: 16px; }
+}
+
+/* Объекты сверх трёх - кнопкой «Ещё объекты» рядом с «Все объекты» (compact.js). */
+.js .st-compact #obekty .grid--4.is-all > :nth-child(n+4) { display: flex; }
+.st-compact #obekty .wrap > .mt-24:has(> .cmore) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.st-compact #obekty .wrap > .mt-24 > .cmore { margin: 0; }
+
+/* ───── Страница цен: на узком экране прайс не распирается строкой ссылок «Подробнее» ───── */
+@media (max-width: 960px) {
+  .st-compact .price-groups { grid-template-columns: minmax(0, 1fr); }
+}
+/* Компьютер: нечётная последняя группа прайса - таблица в своей колонке, ссылки «Подробнее» справа от неё. */
+@media (min-width: 961px) {
+  .st-compact .price-groups > .anchor-block:last-child:nth-child(odd) { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; align-items: start; }
+  .st-compact .price-groups > .anchor-block:last-child:nth-child(odd) > * { grid-column: 1; }
+  .st-compact .price-groups > .anchor-block:last-child:nth-child(odd) > .minor-line { grid-column: 2; grid-row: 2; margin-top: 0; }
+}
+
+/* ───── Прайс на телефоне: название на всю ширину, ниже - единица и цена одной строкой ───── */
+@media (max-width: 720px) {
+  .st-compact table.price tr { align-items: baseline; }
+  .st-compact table.price td:first-child { grid-column: 1 / -1; grid-row: 1; }
+  .st-compact table.price td:nth-child(2):not(.num) { grid-column: 1; grid-row: 2; }
+  .st-compact table.price td.num { grid-column: 2; grid-row: 2; align-self: baseline; }
+}
+
+/* ───── Гео-страница: заглушка карты не выше списка посёлков; на телефоне - строкой текста ───── */
+.st-compact .split:has(> div > .map-stub) { align-items: stretch !important; }
+.st-compact .split > div:has(> .map-stub) { display: flex; flex-direction: column; }
+.st-compact .split > div > .map-stub { flex: 1; aspect-ratio: auto; min-height: 150px; }
+@media (max-width: 860px) {
+  .st-compact .split > div > .map-stub { min-height: 0; padding: 14px 16px; }
+}
+
+/* ───── Подбор станции: карточки плотнее (подбор, фильтры и «Показать ещё» - как были) ───── */
+.st-compact .pcard { padding: 16px 18px; }
+.st-compact .pcard h3 { font-size: 19px; margin-bottom: 8px; }
+.st-compact .pcard__specs { gap: 4px; margin-bottom: 10px; }
+.st-compact .pcard__specs > div { padding-bottom: 4px; font-size: 14px; }
+.st-compact .pcard__tags { margin-bottom: 10px; }
+.st-compact .pcard__prices { padding: 10px 12px; }
+.st-compact .pcard__btn { margin-top: 10px; min-height: 44px; padding-top: 10px; padding-bottom: 10px; }
+.st-compact .pcard__more { margin-top: 6px; }
+@media (min-width: 1024px) {
+  /* Три вопроса подбора - в три колонки одной строкой. */
+  .st-compact .picker__filters:has(> .picker__group:nth-child(3):last-child) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 24px; }
+  .st-compact .picker__filters:has(> .picker__group:nth-child(3):last-child) > .picker__group { grid-template-columns: minmax(0, 1fr); align-content: start; }
+}
+
+/* ───── Страница объекта: заглушка «Нужно фото» вместо галереи - полосой с текстом, а не во всю ширину 16:7 ───── */
+.st-compact .need--wide { aspect-ratio: auto; padding: 20px 24px 28px; }
+
+/* ───── «Смежные услуги» без карточек (29.10.2026): строка «Также делаем» под заголовком, крупно, переносится по строкам ───── */
+.st-compact .minor-line--lead { margin-top: 0; padding: 16px 20px; }
+@media (max-width: 720px) {
+  .st-compact .minor-line--lead { flex-wrap: wrap; overflow: visible; padding: 14px 16px; }
+  .st-compact .minor-line--lead > span { flex-basis: 100%; }
+  .st-compact .minor-line--lead > * { flex-shrink: 1; }
+  .st-compact .minor-line--lead .chip { white-space: normal; padding: 9px 14px; font-size: 15px; }
+}

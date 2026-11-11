@@ -1,0 +1,89 @@
+/* Дополнения темы к global.css прототипа. */
+
+/* PhotoNeeded.astro: стили компонента (в прототипе — scoped <style>). */
+.need {
+  position: relative; display: flex; align-items: center; justify-content: center; width: 100%;
+  aspect-ratio: 1; padding: 18px 16px 30px; text-align: center; color: #5a6878;
+  background: repeating-linear-gradient(135deg, #f3f6f9 0 14px, #eef2f6 14px 28px);
+  border: 2px dashed #b7c2d0; border-radius: var(--r-sm);
+}
+.need__in { max-width: 420px; }
+.need__icon { display: block; margin: 0 auto 8px; color: #8a97a8; }
+.need__title { font-weight: 800; color: var(--navy, #1E3A5F); font-size: 15px; letter-spacing: .02em; }
+.need__text { margin: 6px 0 0; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.need__mark {
+  position: absolute; right: 10px; bottom: 8px; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+  color: #8a97a8; background: rgba(255,255,255,.7); padding: 1px 6px; border-radius: var(--r-xs);
+}
+
+.need--hero { aspect-ratio: 4 / 4.4; border-radius: var(--r-lg); padding: 28px 28px 40px; }
+.need--hero .need__icon { width: 56px; height: 56px; }
+.need--hero .need__title { font-size: 20px; }
+.need--hero .need__text { font-size: 16px; }
+.need--hero.need--short { aspect-ratio: 16 / 10; }
+
+.need--card, .need--svc { aspect-ratio: 4 / 3; border-radius: 0; border-width: 0 0 2px; padding: 14px 14px 28px; }
+.need--svc { aspect-ratio: 16 / 10; }
+.need--card .need__icon, .need--svc .need__icon { width: 32px; height: 32px; margin-bottom: 4px; }
+.need--card .need__title, .need--svc .need__title { font-size: 14px; }
+.need--card .need__text, .need--svc .need__text { font-size: 12.5px; }
+
+.need--tile .need__icon { width: 30px; height: 30px; margin-bottom: 4px; }
+.need--tile .need__title { font-size: 14px; }
+.need--tile .need__text { font-size: 12.5px; }
+
+.need--wide { aspect-ratio: 16 / 7; border-radius: var(--radius, 14px); padding: 28px 24px 40px; }
+.need--wide .need__title { font-size: 18px; }
+.need--wide .need__text { font-size: 15px; }
+
+@media (max-width: 880px) {
+  .need--hero { aspect-ratio: 16 / 10; border-radius: var(--r); padding: 18px 16px 32px; }
+  .need--hero .need__icon { width: 40px; height: 40px; }
+  .need--hero .need__title { font-size: 17px; }
+  .need--hero .need__text { font-size: 14px; }
+}
+@media (max-width: 560px) {
+  .need--wide { aspect-ratio: 4 / 3; }
+}
+
+/* WordPress: ловушка для ботов в формах заявок (inc/leads.php) — людям не видна. */
+.st-hp { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
+
+/* WordPress: панель администратора не должна перекрывать липкую шапку. */
+.admin-bar .header { top: 32px; }
+@media (max-width: 782px) { .admin-bar .header { top: 46px; } }
+
+/* Заглушка интерактивного блока, который будет перенесён на следующем этапе. */
+.st-todo { border: 2px dashed #b7c2d0; border-radius: var(--r-sm); padding: 20px; color: #5a6878; background: #fff; }
+
+/* Страница «Партнёры» (templates/page-partners.php): карточка партнёра с логотипом и направления совместной работы */
+.partner { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: clamp(24px, 4vw, 48px); box-shadow: var(--shadow); }
+.partner__top { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+.partner__brand { display: flex; align-items: center; gap: 18px; text-decoration: none; color: inherit; }
+.partner__brand img { width: 112px; height: auto; flex: none; }
+.partner__name { font-size: clamp(24px, 2.6vw, 32px); font-weight: 800; line-height: 1.05; letter-spacing: -.01em; }
+.partner__name b { color: #0b3b75; font-weight: inherit; }
+.partner__name span { color: #3d9d19; }
+.partner__tag { margin-top: 6px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.partner__title { font-size: clamp(24px, 2.8vw, 34px); line-height: 1.15; margin: 8px 0 14px; }
+.partner__text { color: var(--muted); margin: 0; }
+.partner__dir { margin-top: clamp(24px, 4vw, 40px); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); padding: clamp(20px, 3vw, 32px); }
+.partner__dir-head { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.partner__dir-head svg { color: var(--navy); flex: none; }
+.partner__dir h3 { font-size: clamp(20px, 2.2vw, 26px); margin: 14px 0 18px; }
+.partner__roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.partner__role { border-left: 3px solid var(--blue); padding: 2px 0 2px 16px; }
+.partner__role--ours { border-left-color: var(--orange); }
+.partner__role strong { display: block; margin-bottom: 4px; color: var(--navy); }
+.partner__role p { margin: 0; color: var(--muted); }
+.partner__foot { margin-top: clamp(20px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.partner__foot p { margin: 0; color: var(--muted); max-width: 620px; }
+@media (max-width: 820px) {
+	.partner__top, .partner__roles { grid-template-columns: 1fr; }
+	.partner__top > * { min-width: 0; }
+	.partner__brand { flex-direction: column; align-items: flex-start; gap: 12px; }
+	.partner__brand img { width: 96px; }
+	.partner__name { font-size: 26px; overflow-wrap: anywhere; }
+	.partner__tag { letter-spacing: .1em; }
+	.partner__foot .btn { width: 100%; }
+}
